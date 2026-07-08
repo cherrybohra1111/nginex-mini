@@ -10,9 +10,18 @@ const server=http.createServer((req, res) => {
     const url =req.url;
     console.log(`Received a ${httpMethod} request for ${url}`);
 
+    let fileName;
+
+    const routes = {
+        "/": "index.html",
+        "/about": "about.html",
+        "/contact": "contact.html"
+    };
+
+    fileName = routes[url];
+
     const filePath = path.join(
-        __dirname, 'public',
-        url === "/" ? "index.html" : url
+        __dirname, 'public', fileName ? fileName : url
     );
 
     const extName=path.extname(filePath).toLowerCase();
