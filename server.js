@@ -15,6 +15,22 @@ const server=http.createServer((req, res) => {
         url === "/" ? "index.html" : url
     );
 
+    const extName=path.extname(filePath).toLowerCase();
+
+    console.log(`File Path : ${filePath}`);
+    console.log(`Extension Name : ${extName}`);
+
+    const mimeType = {
+        ".html" : "text/html" ,
+        ".css" : "text/css" ,
+        ".txt" : "text/plain",
+        ".png" : "image/png",
+        ".js" : "text/javascript"
+    }
+
+    const contentType=mimeType[extName] || "application/octet-stream";
+    console.log(`File Type : ${contentType}`);
+
 
     fs.readFile(filePath, (err, content) =>{
         if (err){
@@ -28,7 +44,7 @@ const server=http.createServer((req, res) => {
             }
         }
         else{
-            res.writeHead(200, {"Content-Type": "text/html"});
+            res.writeHead(200, {"Content-Type": contentType});
             res.end(content,"utf-8");
         } 
 
