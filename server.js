@@ -2,16 +2,18 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
+const logger = require('./logger')
+
 const PORT=3000;
 
 const server=http.createServer((req, res) => {
     const httpMethod=req.method;
     const url =req.url;
     console.log("------------");
-    console.log(`Received a ${httpMethod} request for ${url}`);
+    logger.info(`Received a ${httpMethod} request for ${url}`);
 
     let fileName;
-
+ 
     const routes = {
         "/": "index.html",
         "/about": "about.html",
@@ -26,8 +28,8 @@ const server=http.createServer((req, res) => {
 
     const extName=path.extname(filePath).toLowerCase();
 
-    console.log(`File Path : ${filePath}`);
-    console.log(`Extension Name : ${extName}`);
+    logger.info(`File Path : ${filePath}`);
+    logger.info(`Extension Name : ${extName}`);
 
     const mimeType = {
         ".html" : "text/html" ,
@@ -38,7 +40,7 @@ const server=http.createServer((req, res) => {
     }
 
     const contentType=mimeType[extName] || "application/octet-stream";
-    console.log(`File Type : ${contentType}`);
+    logger.info(`File Type : ${contentType}`);
 
 
     fs.readFile(filePath, (err, content) =>{
@@ -48,6 +50,7 @@ const server=http.createServer((req, res) => {
                 
                 fs.readFile(errorPagePath, (error, errorContent) =>{
                     res.writeHead(404, {"Content-Type": "text/html"});
+                    logger.warn("404 - Page Not Found");
 
                     if (error){
                         res.end("404 - Page Not Found");
@@ -63,6 +66,7 @@ const server=http.createServer((req, res) => {
                 
                 fs.readFile(errorPagePath, (error, errorContent) =>{
                     res.writeHead(500, {"Content-Type": "text/html"});
+                    logger.error("500 - Internal Server Error");
 
                     if (error){
                         res.end("500 - Internal Server Error");
@@ -85,6 +89,6 @@ const server=http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    logger.info(`Server running on port ${PORT}`);
 });
 
