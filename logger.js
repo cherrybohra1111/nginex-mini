@@ -7,6 +7,13 @@ const logToFile = (logMessage) => {;
     fs.appendFileSync(logFile, logMessage);
 };
 
+const colors = {
+    green: "\x1b[32m",
+    yellow: "\x1b[33m",
+    red: "\x1b[31m",
+    reset: "\x1b[0m"
+};
+
 function pad(number){
     return String(number).padStart(2,"0");
 }
@@ -25,19 +32,19 @@ function getTimestamp(){
 
 function info(message){
     const logMessage =`${getTimestamp()} INFO: ${message}`;
-    console.log(logMessage);
+    console.log(colors.green + logMessage + colors.reset);
     logToFile(logMessage+"\n");
 }
 
 function warn(message){
     const logMessage =`${getTimestamp()} WARN: ${message}`;
-    console.log(logMessage);
+    console.log(colors.yellow + logMessage + colors.reset);
     logToFile(logMessage+"\n");
 }
 
 function error(message){
     const logMessage =`${getTimestamp()} ERROR: ${message}`;
-    console.log(logMessage);
+    console.log(colors.red + logMessage + colors.reset);
     logToFile(logMessage+"\n");
 }
 
